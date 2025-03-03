@@ -1,51 +1,10 @@
-body {
-	margin: 0;
-	font-family:
-		-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-		'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-
-code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
-:root {
-	--accent-color-hue: 236;
-	--accent-color-saturation: 100%;
-	--disabled-color: #cfcfcf;
-	--error-color: #d40000;
-}
-
-.app {
+.container {
 	text-align: center;
-	max-width: 700px;
+	max-width: 950px;
 	margin: 0 auto;
-	padding: 20px;
 }
 
-.error {
-	color: var(--error-color);
-	font-weight: bold;
-}
-
-.pageHeading {
-	margin: 0 0 0.5rem;
-	font-size: 25px;
-	font-weight: bold;
-}
-
-.noMarginText {
-	margin: 0;
-}
-
-.currentValue {
-	font-weight: bold;
-}
-
-.buttonsContainer {
-	margin-top: 1.5rem;
+.buttons-container {
 	display: flex;
 	justify-content: center;
 	gap: 10px;
@@ -59,44 +18,55 @@ code {
 	transition: background-color 0.15s ease;
 }
 
-.buttonDel {
-	margin-left: 150px;
-	margin-top: 5px;
-	padding: 0.5em 0.75em;
-	background-color: red;
-	color: white;
-	font-size: 15px;
-	border: none;
-}
-
 .button:hover {
 	background-color: hsl(var(--accent-color-hue), var(--accent-color-saturation), 87%);
-}
-
-.button:active {
-	background-color: hsl(var(--accent-color-hue), var(--accent-color-saturation), 82%);
 }
 
 .button:disabled {
 	background-color: var(--disabled-color);
 }
 
-.listContainer {
-	margin-top: 1.5rem;
+.steps-content {
+	margin-bottom: 30px;
+	min-height: 100px;
+	border: 2px solid hsl(var(--accent-color-hue), var(--accent-color-saturation), 92%);
+	border-radius: 15px;
+	padding: 15px 20px;
 }
 
-.listHeading {
-	font-size: 20px;
+.steps-list {
+	list-style: none;
+	margin: 0;
+	margin-bottom: 30px;
+	padding: 0;
+	display: flex;
+	justify-content: space-between;
+	gap: 15px;
+}
+
+.steps-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex: 1 1 0px;
+	font-size: 0.75rem;
+}
+
+.steps-item-button {
+	cursor: pointer;
+	border-radius: 50%;
+	padding: 0.75rem 1rem;
+	background: #cccccc;
+	border: none;
+	margin-bottom: 0.25rem;
+}
+
+.steps-item.active .steps-item-button,
+.steps-item.done .steps-item-button {
+	background: hsl(var(--accent-color-hue), var(--accent-color-saturation), 92%);
+}
+
+.steps-item.active,
+.steps-item.active .steps-item-button {
 	font-weight: bold;
-	margin: 0 0 0.5rem;
-}
-
-.list {
-	text-align: left;
-	margin: 0 auto;
-	max-width: 300px;
-}
-
-.list-item:not(:last-child) {
-	margin-bottom: 0.5em;
 }

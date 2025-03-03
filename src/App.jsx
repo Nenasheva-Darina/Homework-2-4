@@ -1,87 +1,97 @@
 import { useState } from 'react';
 import styles from './App.module.css';
+import data from './data.json';
 
 export const App = () => {
-	const [value, setValue] = useState('');
-	const [list, setList] = useState([]);
-	const [error, setError] = useState('');
+	const [steps, setSteps] = useState(data); //массив c данными для кнопок
+	const [activeIndex, setActiveIndex] = useState(0); //индекс определяющий активный шаг
 
-	const errorMessage =
-		'Введенное значение должно содержать минимум 3 символа, вы ввели: ';
+	// const [firstFlag, setFirstFlag] = useState(true); //находимся ли мы на первом шаге
+	// const [lastFlag, setlastFlag] = useState(true); //находимся ли на последнем
 
-	const onInputButtonClick = () => {
-		const promptValue = prompt('Введите значение');
-		if (promptValue === null) {
-			setValue('');
-			setError('');
-			return;
-		} else if (promptValue.length >= 3) {
-			setValue(promptValue);
-			setError('');
-		} else {
-			setError(errorMessage + promptValue);
-		}
-	};
-	const errorBlock = <div className={styles.error}>{error}</div>;
-	const elemBlock = <p className={styles.noMarginText}>Нет добавленных элементов</p>;
-	const isValueVaild = value.length >= 3;
-
-	const onAddButtonClick = () => {
-		if (isValueVaild) {
-			const id = Date.now();
-			const updatedList = [...list, { id, value }];
-			setList(updatedList);
-			setValue('');
-			setError('');
-			return;
-		}
+	// переменные со стилями для шагов кнопок
+	const passiveStyleClassName = styles['steps-item'];
+	const activeStyleClassName = `${passiveStyleClassName + ' ' + styles.done + ' ' + styles.active}`;
+	const doneStyleClassName = `${passiveStyleClassName + ' ' + styles.done}`;
+	// получаем активный пассивный класс
+	const getClassName = (index, activeIndex) => {
+		if (index === activeIndex) {
+			return activeStyleClassName;
+		} else if (index <= activeIndex) {
+			return doneStyleClassName;
+		} else return passiveStyleClassName;
 	};
 
-	const deletElemId = (id) => {
-		const newList = list.filter((item) => item.id !== id);
-		setList(newList);
+	// Получаем активный индекс из переборного массива
+	const updateIndexClickButtonStep = (index) => {
+		setActiveIndex(index);
 	};
 
-	const renderList = () => {
-		return list.map((item) => (
-			<>
-				<li className={styles.listItem} key={item.id}>
-					{item.value}
-					<button
-						className={styles.buttonDel}
-						onClick={() => deletElemId(item.id)}
-					>
-						Удалить
-					</button>
-				</li>
-			</>
-		));
+	// Добавление кнопок шагов
+	const stepButton = steps.map((step, index) => {
+		// сравниваем активный индекс и добавляем активный стиль
+		const opredClassName = getClassName(index, activeIndex);
+		return (
+			<li key={step.id} className={opredClassName}>
+				<button
+					className={styles['steps-item-button']}
+					onClick={() => updateIndexClickButtonStep(index)}
+				>
+					{index + 1}
+				</button>
+				{step.title}
+			</li>
+		);
+	});
+
+	const aktivContent = steps[activeIndex]
+		? steps[activeIndex].content
+		: console.log('Такого шага не существует');
+
+	//назад
+	const onBackButtonClick = () => {
+		setActiveIndex(activeIndex - 1);
+	};
+
+	//далеe
+	const onForwardButtonClick = () => {
+		setActiveIndex(activeIndex + 1);
+	};
+
+	// сначала
+	const onStartOverButtonClick = () => {
+		return setActiveIndex(0);
 	};
 
 	return (
-		<div className={styles.app}>
-			<h1 className={styles.pageHeading}>Ввод значения</h1>
-			<p className={styles.noMarginText}>
-				Текущее значение <code>value</code>: "
-				<output className={styles.currentValue}>{value}</output>"
-			</p>
-			{error && errorBlock}
-			<div className={styles.buttonsContainer}>
-				<button className={styles.button} onClick={onInputButtonClick}>
-					Ввести новое
-				</button>
-				<button
-					className={styles.button}
-					disabled={!isValueVaild}
-					onClick={onAddButtonClick}
-				>
-					Добавить в список
-				</button>
-			</div>
-			<div className={styles.listContainer}>
-				<h2 className={styles.listHeading}>Список:</h2>
-				{list.length === 0 && elemBlock}
-				<ul className={styles.list}>{renderList()}</ul>
+		<div className={styles.container}>
+			<div className={styles.card}>
+				<h1>Инструкция по готовке пельменей</h1>
+				<div className={styles.steps}>
+					<div className={styles['steps-content']}>{aktivContent}</div>
+					<ul className={styles['steps-list']}>{stepButton}</ul>
+					<div className={styles['buttons-container']}>
+						<button
+							disabled={activeIndex === 0}
+							className={styles.button}
+							onClick={onBackButtonClick}
+						>
+							Назад
+						</button>
+						<button
+							className={styles.button}
+							onClick={
+								activeIndex === steps.length - 1
+									? onStartOverButtonClick
+									: onForwardButtonClick
+							}
+						>
+							{activeIndex === steps.length - 1
+								? 'Начать сначала'
+								: 'Далее'}
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	);
