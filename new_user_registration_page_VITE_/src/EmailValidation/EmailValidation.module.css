@@ -1,0 +1,43 @@
+.errorBlock {
+  width: 350px;
+  height: 50px;
+  margin-left: 60px;
+  background-color: #ff3f3fd8;
+  color: #ffffff;
+  border: 1px solid #7e0717;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.hint {
+  color: #333232e1;
+  width: 350px;
+  background-color: rgba(254, 255, 255, 0.712);
+  font-size: 16px;
+  white-space: pre-line;
+  padding: 8px;
+  margin: 0px 0px 10px 65px;
+  border-left: 3px solid #007bff;
+  border-radius: 4px;
+}
+
+.input {
+  width: 400px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+  margin-left: 50px;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
