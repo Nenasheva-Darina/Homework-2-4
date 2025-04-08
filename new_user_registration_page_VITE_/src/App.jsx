@@ -1,6 +1,6 @@
-import { useRegistration } from './userRegistration.jsx';
+import { useStorageForRegistration } from './useStorageForRegistration.jsx';
 import './index.css';
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import styles from './App.module.css';
 import { EmailValidationContainer } from './EmailValidation/EmailValidationContainer.jsx';
 
@@ -9,62 +9,69 @@ const sendFormData = (formData) => {
 };
 
 export const App = () => {
-  const { getState, updateState, resetState } = useRegistration();
-  const { email, password, repeatPassword } = getState();
-  const [errorPassword, setErrorPassword] = useState(null);
-  const [errorEmail, setErrorEmail] = useState(null);
+  const {
+    getState,
+    updateState,
+    resetState,
+    validatePassword,
+    setEmailError,
+    errors,
+  } = useStorageForRegistration(); // 1
+
+  const { email, password, repeatPassword } = getState(); // 2
+
+  //Фокус
   const buttonRef = useRef(null);
+  const repeatPasswordRef = useRef(null);
 
-  const validateForm = () => {
-    let isValid = true;
-
-    if (password !== repeatPassword) {
-      setErrorPassword('Пароли не совпадают!');
-      isValid = false;
-    } else {
-      setErrorPassword(null);
-    }
-
-    return isValid;
-  };
+  const onChange = ({ target }) => updateState(target.name, target.value);
 
   const onSubmit = (event) => {
     event.preventDefault();
 
-    if (validateForm()) {
+    const isPasswordValid = validatePassword();
+
+    if (!errors.email && isPasswordValid) {
       sendFormData(getState());
       resetState();
-      setErrorEmail(null);
-      setErrorPassword(null);
     }
   };
+
+  const isButtonDisabled =
+    errors.email || errors.password || errors.repeatPassword;
 
   useEffect(() => {
     const isFormValid =
       email &&
-      email.length > 0 &&
       password &&
-      password.length > 0 &&
       repeatPassword &&
-      repeatPassword.length > 0 &&
       password === repeatPassword &&
-      !errorEmail &&
-      !errorPassword;
+      !errors.email &&
+      !errors.password &&
+      !errors.repeatPassword;
 
     if (isFormValid && buttonRef.current) {
       buttonRef.current.focus();
     }
-  }, [email, password, repeatPassword, errorEmail, errorPassword]);
+    if (errors.repeatPassword) {
+      repeatPasswordRef.current?.focus();
+    }
+  }, [email, password, repeatPassword, errors]);
 
   return (
     <>
       <form onSubmit={onSubmit}>
-        {errorPassword && (
-          <div className={styles.errorBlock}>{errorPassword}</div>
-        )}
+        {errors.password ||
+          (errors.repeatPassword && (
+            <div className={styles.errorBlock}>
+              {errors.password}
+              {errors.repeatPassword}
+            </div>
+          ))}
         <EmailValidationContainer
-          setErrorEmail={setErrorEmail}
+          setErrorEmail={setEmailError}
           value={email}
+          error={errors.email}
           onChange={(value) => updateState('email', value)}
         />
 
@@ -74,7 +81,7 @@ export const App = () => {
           name="password"
           placeholder="Пароль"
           value={password}
-          onChange={({ target }) => updateState('password', target.value)}
+          onChange={onChange}
         />
         <input
           className={styles.input}
@@ -82,16 +89,21 @@ export const App = () => {
           name="repeatPassword"
           placeholder="Повтор пароля"
           value={repeatPassword}
-          onChange={({ target }) => updateState('repeatPassword', target.value)}
+          onChange={onChange}
+          ref={repeatPasswordRef}
         />
 
         <button
           type="submit"
           className={styles.button}
-          disabled={errorEmail || errorPassword}
+          disabled={isButtonDisabled}
           ref={buttonRef}
         >
           Зарегистрироваться
+        </button>
+
+        <button type="button" className={styles.button} onClick={resetState}>
+          Сброс
         </button>
       </form>
     </>

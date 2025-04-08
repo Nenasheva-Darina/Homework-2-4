@@ -30,7 +30,12 @@ export const EmailValidationContainer = ({
     if (!newValue.includes('@')) {
       newError = 'Неверный email.Отсутствует @';
       setError(newError);
-    } else if (startEmail.length > 20) {
+    } else if (!emailRegex.test(newValue)) {
+      newError = 'Неверный email. Изучи внимательно требования.';
+      setError(newError);
+    }
+
+    if (startEmail.length > 20) {
       newError = 'Неверный email. Должно быть не больше 20 символов до @';
       setError(newError);
     } else if (startEmail.length < 3) {
@@ -38,11 +43,6 @@ export const EmailValidationContainer = ({
       setError(newError);
     } else if (startEmail === '') {
       setError(null);
-    }
-
-    if (!emailRegex.test(newValue)) {
-      newError = 'Неверный email. Изучи внимательно требования.';
-      setError(newError);
     }
 
     setError(newError);
