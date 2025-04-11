@@ -1,0 +1,88 @@
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+form {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.field {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.errorBlock {
+  width: 100%;
+  max-width: 350px;
+  padding: 10px;
+  margin: 0 auto 15px;
+  background-color: #ff3f3fd8;
+  color: #ffffff;
+  border: 1px solid #7e0717;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  margin: 0 auto 10px;
+  display: block;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.button:hover {
+  background-color: #014894;
+}
+
+.button:disabled {
+  background-color: #7a7979;
+  color: #c7c0c0;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  flex: 1;
+  max-width: 200px;
+}
